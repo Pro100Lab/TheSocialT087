@@ -2,13 +2,13 @@
   <v-app>
     <v-main class="main-display main-display__bg pa-4" v-if="!showPresentation">
         <v-row dense class="mr-3" >
-          <v-col cols="9">
+          <v-col cols="12">
             <router-view class="main-display__main-view"/>
           </v-col>
 
-          <v-col cols="3">
-            <log-display class="main-display__main-view"></log-display>
-          </v-col>
+<!--          <v-col cols="3">-->
+<!--            <log-display class="main-display__main-view"></log-display>-->
+<!--          </v-col>-->
 
           <v-col cols="12">
             <display-switch class="main-display__secondary-view"></display-switch>
@@ -26,7 +26,7 @@
 <script>
 
 import DisplaySwitch from "@/components/DisplaySwitch";
-import LogDisplay from "@/components/LogDisplay";
+// import LogDisplay from "@/components/LogDisplay";
 import ShowPresents from "@/views/ShowPresents";
 
 export default {
@@ -34,7 +34,7 @@ export default {
   components: {
     ShowPresents,
     DisplaySwitch,
-    LogDisplay
+    // LogDisplay
   },
   data: () => ({
     showPresentation: true,
@@ -53,7 +53,8 @@ export default {
   }
 
   .main-display__main-view {
-    height: 80vh;
+    min-height: 80vh;
+    max-height: 80vh;
   }
 
   .main-display {

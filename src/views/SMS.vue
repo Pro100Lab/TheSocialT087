@@ -74,7 +74,7 @@
     }
 
     .sms__main-container-adaptive {
-        width: 40%;
+        width: 30%;
     }
     @media screen and (max-width: 960px){
         .sms__main-container-adaptive {

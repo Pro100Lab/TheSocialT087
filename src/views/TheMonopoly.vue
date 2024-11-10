@@ -1,15 +1,10 @@
 <template>
-    <v-card>
+    <v-card color="teal-lighten-5" class="overflow-y-auto">
         <transition name="slide-fade">
             <v-list v-if="showProducts"
                     style="position: sticky; left: 0; top: 0; height: 100%"
+                    class="overflow-y-auto"
             >
-                <v-list-item>
-                    <v-list-item-action>
-                        <v-icon icon="mdi-close" v-on:click="showProducts = false"></v-icon>
-                    </v-list-item-action>
-                </v-list-item>
-
                 <v-list-group
                         v-for="product of products"
                         :key="`nav-product-${product.id}`"
@@ -33,27 +28,132 @@
         </transition>
 
         <v-toolbar dark>
-            <v-app-bar-nav-icon v-on:click="showProducts = !showProducts"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon v-on:click="showProducts = !showProducts" :icon="showProducts ? 'mdi-close': 'mdi-menu'"></v-app-bar-nav-icon>
 
             <v-toolbar-title>
-                Монополия
+                Монополия | Единое окно услуг
             </v-toolbar-title>
 
         </v-toolbar>
 
         <div class="monopoly__main-container pa-3">
-            <v-card-title>
-                Помогаем выгодно вложиться
-            </v-card-title>
             <v-row>
-                <v-col
-                        v-for="product of getNTop(4)"
-                        :key="`service-${product.id}`"
-                >
-                    <v-card variant="flat" color="teal-lighten-5" rounded="lg" height="200">
+                <v-col cols="6">
+                    <v-card variant="flat" rounded="lg">
                         <v-card-title>
-                            {{product.name}}
+                            Счета
                         </v-card-title>
+                        <template v-if="true">
+                        <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`" class="px-2">
+                            <v-col cols="12" class="py-0">
+                                <v-card rounded="lg" elevation="0" style="background-color: rgba(255,255,255,0.5)">
+                                    <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
+                                    <v-card-title class="py-0">{{Math.floor(account.amount / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.amount % 100}} ₽</v-card-title>
+                                    <v-card-actions>
+                                        <v-btn
+                                                v-for="action of account.actions"
+                                                :key="`bank-account-action-${account.idx}-${action.idx}`"
+                                                v-on:click="processLink(action.link)"
+                                                rounded="xl"
+                                        >
+                                            {{action.name}}
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                        </template>
+                        <template v-else>
+                            <v-card-title>Отсутсвует согласие на управление счетами</v-card-title>
+                            <v-skeleton-loader type="card">
+
+                            </v-skeleton-loader>
+                            <v-btn block v-on:click="makeAgreement('Управление счетами')">Получить</v-btn>
+
+                        </template>
+                    </v-card>
+                </v-col>
+                <v-col cols="6">
+                    <v-card variant="flat" rounded="lg">
+                        <v-card-title>
+                            Доходы/Расходы
+                        </v-card-title>
+
+                        <template v-if="true">
+                        <v-progress-linear height="40" :model-value="stat.loanRate" :color="pickHex()">
+
+                        </v-progress-linear>
+
+                        <v-card>
+                            <v-card-title class="pb-0" style="font-weight: 300">Ежемесячный доход: {{Math.floor(stat.income / 100).toString().match(/\d{1,3}/g).join(' ')}},{{stat.income % 100}} ₽</v-card-title>
+                            <v-card-title class="py-0" style="font-weight: 300">Расходы по обязательства: {{Math.floor(stat.payments / 100).toString().match(/\d{1,3}/g).join(' ')}},{{stat.payments % 100}} ₽</v-card-title>
+                            <v-card-title class="py-0" style="font-weight: 300">Обязательств: {{stat.loansCount}}</v-card-title>
+                        </v-card>
+
+                        <v-card-actions>
+                            <v-btn block>
+                                Советы и рекомендации <v-icon icon="mdi-chevron-right"></v-icon>
+                            </v-btn>
+                        </v-card-actions>
+                        </template>
+                        <template v-else>
+                            <v-card-title>Отсутсвует согласие на управление счетами</v-card-title>
+                            <v-skeleton-loader type="card">
+
+                            </v-skeleton-loader>
+                            <v-btn block v-on:click="makeAgreements(['Финансовые услуги','Данные о доходах'])">Получить</v-btn>
+
+                        </template>
+                    </v-card>
+                </v-col>
+                <v-col cols="12">
+                    <v-card variant="flat" rounded="lg">
+
+                        <template v-if="true">
+                        <v-row>
+                            <v-col cols="5">
+                                <v-card-title>
+                                    управление согласиями
+                                </v-card-title>
+                            </v-col>
+                            <v-col cols="2" >
+                                <v-card-title class="text-center">
+                                    Согласие
+                                </v-card-title>
+                            </v-col>
+                            <v-col cols="5">
+                                <v-card-title>
+                                    Потребитель услуг
+                                </v-card-title>
+                            </v-col>
+                        </v-row>
+
+                        <v-list>
+                            <v-list-item
+                                    density="compact"
+                                    v-for="agree of agreements" :key="agree.id"
+                            >
+                                <v-row>
+                                    <v-col cols="5">
+                                        {{agree.name}}
+                                    </v-col>
+                                    <v-col cols="2" class="d-flex flex-row justify-center">
+                                        <v-checkbox density="compact" v-model="agree.agree"></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="5">
+                                        <v-select density="compact" v-model="agree.orgs" :items="financialOrgs" multiple></v-select>
+                                    </v-col>
+                                </v-row>
+
+                            </v-list-item>
+                        </v-list>
+                        </template>
+                        <template v-else>
+                            <v-card-title>
+                                Теперь нельзя управлять согласиями, доигрался!?
+                            </v-card-title>
+                            <v-skeleton-loader type="card"></v-skeleton-loader>
+                        </template>
                     </v-card>
                 </v-col>
             </v-row>
@@ -66,6 +166,72 @@
         name: "TheMonopoly",
         data: () => {
             return {
+                financialOrgs: [
+                    'Монополия'
+                ],
+                stat: {
+                    income: 36571644,
+                    payments: 24310000,
+                    loansCount: 10,
+                    loanRate: 70,
+                },
+                agreements: [{
+                    id: 0,
+                    name: 'Управление счетами',
+                    agree: false,
+                    items: [],
+                    orgs: []
+                }, {
+                    id: 1,
+                    name: 'Финансовые услуги',
+                    agree: false,
+                    items: [],
+                    orgs: []
+                }, {
+                    id: 2,
+                    name: 'Данные о доходах',
+                    agree: false,
+                    items: [],
+                    orgs: []
+                }, {
+                    id: 3,
+                    name: 'Управление согласиями',
+                    agree: true,
+                    items: [],
+                    orgs: ['Монополия']
+                }],
+                accounts: [
+                    {
+                        idx: 0,
+                        name: 'Денежки',
+                        amount: 24035632,
+                        currency: 'rub',
+                        cards: [{
+                            idx: 0,
+                            number: '1111 1111 1111 1111'
+                        }],
+                        actions: [{
+                            idx: 0,
+                            name: 'Перевести',
+                            link: 'transfer'
+                        }]
+                    },
+                    {
+                        idx: 3,
+                        name: 'Счет для погашения кредита',
+                        amount: 10,
+                        currency: 'rub',
+                        cards: [{
+                            idx: 0,
+                            number: '1111 1111 1111 1111'
+                        }],
+                        actions: [{
+                            idx: 1,
+                            name: 'Перевести',
+                            link: 'transfer'
+                        }]
+                    }
+                ],
                 showProducts: false,
                 openedProducts: [],
                 products: [
@@ -255,7 +421,13 @@
                 ]
             }
         },
+        mounted() {
+            this.calculateLoanRate();
+        },
         methods: {
+            calculateLoanRate() {
+                this.stat.loanRate = this.stat.payments / this.stat.income * 100
+            },
             handleLink(link) {
                 console.log(link);
             },
@@ -271,13 +443,74 @@
                 this.products.forEach(product => {
                     allProducts.push(product);
                     product.items.forEach(sub => {
-                      allProducts.push(sub);
+                        allProducts.push(sub);
                     })
                 })
 
                 allProducts = allProducts.sort((a,b) => {return a.rating < b.rating ? 1 : -1});
                 console.log('sorted: ', allProducts);
                 return allProducts.slice(0, n);
+            },
+            processLink(link) {
+                console.log(link);
+            },
+            pickHex() {
+                const color2 = [28, 252, 3];
+                const color1 = [252, 20, 3];
+                const w1 = this.stat.loanRate / 100;
+                const w2 = 1 - w1;
+                return `rgb(${Math.round(color1[0] * w1 + color2[0] * w2)},${Math.round(color1[1] * w1 + color2[1] * w2)},${Math.round(color1[2] * w1 + color2[2] * w2)})`
+            },
+            hasAgreement(zone) {
+                this.agreements.forEach(agreement => {
+                    if(!agreement.agree && agreement.name === zone)
+                        return false;
+
+                    if(agreement.agree && agreement.name === zone && agreement.orgs.indexOf('Монополия') !== -1)
+                        return true;
+
+                    agreement.items.forEach(subagreement => {
+                        if(!subagreement.agree && subagreement.name === zone)
+                            return false;
+
+                        if(subagreement.agree && subagreement.name === zone && subagreement.orgs.indexOf('Монополия') !== -1)
+                            return true;
+                    })
+                })
+
+                return false;
+            },
+            makeAgreement(zone) {
+                this.agreements.forEach(agreement => {
+                    if(agreement.name === zone) {
+                        agreement.orgs.push('Монополия')
+                        agreement.agree = true;
+                    }
+
+                    agreement.items.forEach(sub => {
+                        if(sub.name === zone) {
+                            agreement.orgs.push('Монополия')
+                            agreement.agree = true;
+                        }
+
+                    })
+                })
+            },
+            makeAgreements(zones) {
+                zones.forEach(zone => {
+                    this.makeAgreement(zone);
+                })
+            }
+        },
+        computed: {
+            hasAccountAgreement: function () {
+                return this.hasAgreement('Управление счетами')
+            },
+            hasBudgetAgreement: function() {
+                return this.hasAgreement('Финансовые услуги') && this.hasAgreement('Данные о доходах')
+            },
+            hasAgreementService: function() {
+                return this.hasAgreement('Управление согласиями');
             }
         }
     }

@@ -87,7 +87,6 @@
                 </v-icon>
             </v-card-subtitle>
             <template v-if="services.length > 0 && isServicesOpened">
-                <v-container>
                 <v-row class="overflow-x-auto flex-nowrap">
                     <v-col v-for="service of services" :key="`service-${service.idx}`" cols="4">
                         <v-card color="indigo" rounded="xl">
@@ -111,7 +110,6 @@
                         </v-card>
                     </v-col>
                 </v-row>
-                </v-container>
             </template>
             <template v-else-if="isServicesOpened">
                 <v-card color="indigo" variant="flat" rounded="xl">
