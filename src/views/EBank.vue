@@ -121,6 +121,9 @@
 </template>
 
 <script>
+    import {getURL} from "@/utils/settings";
+    import axios from 'axios';
+
     export default {
         name: "EBank",
         data: () => {
@@ -181,6 +184,14 @@
                     }]
                 }]
             }
+        },
+        mounted() {
+          axios.get(getURL('e_bank/accounts')).then(res => {
+              this.accounts = res.data;
+          });
+            axios.get(getURL('e_bank/loans')).then(res => {
+                this.loans = res.data;
+            });
         },
         methods: {
             processLink(link) {

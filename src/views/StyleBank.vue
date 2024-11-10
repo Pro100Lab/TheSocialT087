@@ -122,6 +122,9 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import {getURL} from "@/utils/settings";
+
     export default {
         name: "StyleBank",
         data: () => {
@@ -218,6 +221,14 @@
                 else
                     this.openedProducts.push(product)
             }
+        },
+        mounted() {
+            axios.get(getURL('style_bank/accounts')).then(res => {
+                this.accounts = res.data;
+            });
+            axios.get(getURL('style_bank/loans')).then(res => {
+                this.loans = res.data;
+            });
         },
         computed: {
             isCashOpened: function() {
