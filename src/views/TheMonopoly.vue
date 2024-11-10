@@ -123,7 +123,7 @@
                             </v-col>
                             <v-col cols="5">
                                 <v-card-title>
-                                    Потребитель услуг
+                                    Поставщик услуг
                                 </v-card-title>
                             </v-col>
                         </v-row>
