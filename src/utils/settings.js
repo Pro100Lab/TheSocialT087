@@ -1,6 +1,6 @@
 
 export const is_debug = process.env.NODE_ENV === 'development';
-export const debug_endpoint = '81.200.153.241:80';
+export const debug_endpoint = '81.200.153.241';
 export const schema = 'http';
 export const debug_schema = 'http';
 export const endpoint_version = 'v1';
