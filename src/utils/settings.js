@@ -13,11 +13,11 @@ export function getURL(urn) {
     if(urn[0] === '/') {
         urn = urn.substring(1);
     }
-    return `${schema}://${debug_endpoint}/api/${urn}`
+    return `${schema}://${debug_endpoint}/api/${urn}/`
 }
 
 export function getWSSUrl(urn) {
-    return `${wss_schema}://${is_debug}/api/wss/${urn}`
+    return `${wss_schema}://${is_debug}/api/wss/${urn}/`
 }
 
 export function getStatic(src) {
