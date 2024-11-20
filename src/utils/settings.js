@@ -1,8 +1,8 @@
 
 export const is_debug = process.env.NODE_ENV === 'development';
-export const debug_endpoint = '81.200.153.241';
-export const schema = 'http';
-export const debug_schema = 'http';
+export const debug_endpoint = 'spacecraft-it.ru/api';
+export const schema = 'https';
+export const debug_schema = 'https';
 export const endpoint_version = 'v1';
 export const wss_schema = 'wss';
 export const ws_schema = 'ws';
