@@ -14,11 +14,11 @@ export function getURL(urn) {
     if(urn[0] === '/') {
         urn = urn.substring(1);
     }
-    return `${is_debug ? debug_schema : schema}://${is_debug ? debug_endpoint : endpoint}/${is_debug ? '' : ''}${urn}`
+    return `${is_debug ? debug_schema : schema}://${is_debug ? debug_endpoint : endpoint}/${urn}`
 }
 
 export function getWSSUrl(urn) {
-    return `${is_debug ? ws_schema : wss_schema }://${is_debug ? debug_endpoint : endpoint}/${is_debug ? '' : ''}${urn}`
+    return `${is_debug ? ws_schema : wss_schema }://${is_debug ? debug_endpoint : endpoint}/${urn}`
 }
 
 export function getStatic(src) {
