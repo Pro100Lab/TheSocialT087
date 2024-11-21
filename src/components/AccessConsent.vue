@@ -17,11 +17,17 @@
         <v-card-text>
             Данное согласие будет выдано на срок до {{ttl ? ttl.toLocaleString() : ''}}
         </v-card-text>
+
         <v-card-actions class="d-flex flex-row align-center justify-center">
+
             <v-btn block v-if="!authorized"
-                   v-on:click="authGosus"
-                   text="Авторизоваться через гос.услуги"></v-btn>
-            <v-btn block v-else v-on:click="callback(requiredAgreements)" text="Даю согласие"></v-btn>
+                   v-on:click="authGosus">
+                Авторизоваться через гос.услуги
+                <v-icon class="ml-2" size="32">
+                    <v-img src="../assets/gosus.svg"></v-img>
+                </v-icon>
+            </v-btn>
+            <v-btn block v-else v-on:click="callback(requiredAgreements)" text="Даю согласие"> </v-btn>
         </v-card-actions>
     </v-card>
 </template>
