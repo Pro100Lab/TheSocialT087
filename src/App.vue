@@ -1,8 +1,8 @@
 <template>
   <v-app>
 
-    <v-main class="main-display main-display__bg pa-4" v-if="!showPresentation">
-        <v-row dense class="mr-3" >
+    <v-main class="main-display main-display__bg" :class="isMobile ? '' : 'pa-4'" v-if="!showPresentation">
+        <v-row dense :class="isMobile ? '' : 'mr-3'" >
 
           <v-col cols="12">
             <router-view :show-sms="showSMS" class="main-display__main-view"/>
@@ -18,7 +18,12 @@
       <show-presents v-if="showPresentation" class="main-display presents-sticky" :on-close="presentationsShowed"></show-presents>
     </transition>
 
-    <v-card rounded="xl" v-if="smsShow" color="black" style="position: absolute; width: 50%; left: 25%;" :class="smsAnimation">
+    <v-card rounded="xl"
+            v-if="smsShow"
+            color="black"
+            style="position: absolute"
+            :style="{width: `${isMobile ? 90 : 50}%`, left: `${isMobile ? 5 : 25}%`}"
+            :class="smsAnimation">
       <v-card-title>{{sms.number}}</v-card-title>
       <v-card-text>{{sms.text}}</v-card-text>
       <v-card-actions>
@@ -112,6 +117,11 @@ export default {
 
     presentationsShowed: function () {
       this.showPresentation = false;
+    }
+  },
+  computed: {
+    isMobile() {
+      return window.innerWidth < 980;
     }
   }
 }
