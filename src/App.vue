@@ -17,7 +17,7 @@
       </v-row>
     </v-main>
 
-    <v-card v-if="isMobile && showDisplays" style="position: fixed; bottom: 0; width: 100%;" color="grey-darken-4">
+    <v-card v-if="isMobile && showDisplays" style="position: fixed; bottom: 0; max-height: 60%; overflow-y: auto; width: 100%;" color="grey-darken-4">
       <v-card-actions>
         <v-card-title>Экраны</v-card-title>
         <v-spacer/>
