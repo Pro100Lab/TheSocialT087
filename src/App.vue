@@ -20,7 +20,7 @@
 
     <v-card rounded="xl"
             v-if="smsShow"
-            color="black"
+            color="grey-darken-4"
             style="position: absolute"
             :style="{width: `${isMobile ? 90 : 50}%`, left: `${isMobile ? 5 : 25}%`}"
             :class="smsAnimation">

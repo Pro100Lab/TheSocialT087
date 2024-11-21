@@ -40,7 +40,7 @@
 
         <div class="monopoly__main-container pa-3">
             <v-row>
-                <v-col cols="6">
+                <v-col xl="6" sm="12">
                     <v-card variant="flat" rounded="lg">
                         <v-card-title>
                             Счета
@@ -75,7 +75,7 @@
                         </template>
                     </v-card>
                 </v-col>
-                <v-col cols="6">
+                <v-col xl="6" sm="12">
                     <v-card variant="flat" rounded="lg">
                         <v-card-title>
                             Доходы/Расходы

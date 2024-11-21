@@ -16,7 +16,7 @@
             </v-card-subtitle>
             <template v-if="accounts.length > 0 && isCashOpened">
                 <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`">
-                    <v-col cols="6">
+                    <v-col xl="6" sm="12">
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
                             <v-card-title class="py-0">{{Math.floor(account.amount / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.amount % 100}} ₽</v-card-title>
@@ -52,7 +52,7 @@
 
             <template v-if="loans.length > 0 && isLoansOpened">
                 <v-row v-for="loan of loans" :key="`bank-loan-${loan.idx}`">
-                    <v-col cols="6">
+                    <v-col xl="6" sm="12">
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{loan.name}}</v-card-subtitle>
                             <v-card-title class="py-0">{{loan.amount}} ₽</v-card-title>
@@ -86,8 +86,8 @@
                 </v-icon>
             </v-card-subtitle>
             <template v-if="services.length > 0 && isServicesOpened">
-                <v-row class="overflow-x-auto" style="width: 200%;">
-                    <v-col v-for="service of services" :key="`service-${service.idx}`" cols="2">
+                <v-row class="overflow-x-auto">
+                    <v-col v-for="service of services" :key="`service-${service.idx}`" xl="2" sm="12">
                         <v-card rounded="xl">
                             <v-card-title>
                                 {{service.title}}
