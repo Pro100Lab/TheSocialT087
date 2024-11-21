@@ -5,7 +5,7 @@
       <v-row dense :class="isMobile ? '' : ''" >
 
         <v-col cols="12">
-          <router-view :show-sms="showSMS" class="main-display__main-view"/>
+          <router-view :send-sms="showSMS" class="main-display__main-view"/>
         </v-col>
 
         <v-col v-if="!isMobile" cols="12">
@@ -125,6 +125,8 @@
       showSMS(number, text) {
         this.smsShow = true;
         this.sms = {number, text, date: new Date()}
+        console.log('show sms: ', this.sms);
+
         this.smsList.push(this.sms);
         this.smsAnimation = 'scrollable'
         setTimeout(() => {

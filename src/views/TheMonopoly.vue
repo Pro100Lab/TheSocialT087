@@ -45,7 +45,7 @@
                         <v-card-title>
                             Счета
                         </v-card-title>
-                        <template v-if="true">
+                        <template v-if="agreements.indexOf('Получение сведений') !== -1">
                         <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`" class="pa-2">
                             <v-col cols="12" class="py-0">
                                 <v-card rounded="lg" elevation="0" style="background-color: rgba(255,255,255,0.5)">
@@ -66,11 +66,11 @@
                         </v-row>
                         </template>
                         <template v-else>
-                            <v-card-title>Отсутсвует согласие на управление счетами</v-card-title>
+                            <v-card-title>Отсутсвует согласие на получение сведений</v-card-title>
                             <v-skeleton-loader type="card">
 
                             </v-skeleton-loader>
-                            <v-btn block v-on:click="makeAgreement('Управление счетами')">Получить</v-btn>
+                            <v-btn block v-on:click="makeAgreement(['Получение сведений'])">Получить</v-btn>
 
                         </template>
                     </v-card>
@@ -81,7 +81,7 @@
                             Доходы/Расходы
                         </v-card-title>
 
-                        <template v-if="true">
+                        <template v-if="agreements.indexOf('Финансовые услуги') !== -1 && agreements.indexOf('Данные о доходах') !== -1">
                         <v-progress-linear height="40" :model-value="stat.loanRate" :color="pickHex()">
 
                         </v-progress-linear>
@@ -103,7 +103,7 @@
                             <v-skeleton-loader type="card">
 
                             </v-skeleton-loader>
-                            <v-btn block v-on:click="makeAgreements(['Финансовые услуги','Данные о доходах'])">Получить</v-btn>
+                            <v-btn block v-on:click="makeAgreement(['Финансовые услуги','Данные о доходах'])">Получить</v-btn>
 
                         </template>
                     </v-card>
@@ -113,15 +113,35 @@
                 </v-col>
             </v-row>
         </div>
+
+        <v-overlay scroll-strategy="block" class="align-center justify-center" v-model="inAgreementProcess">
+            <access-consent
+                    :sp="'Монополия'"
+                    :required-agreements="getAgreementProcess"
+                    :callback="acceptAgreement"
+                    :send-sms="sendSms"
+            :ttl="ttl"
+            >
+
+            </access-consent>
+        </v-overlay>
     </v-card>
 </template>
 
 <script>
+    import AccessConsent from "@/components/AccessConsent";
     export default {
         name: "TheMonopoly",
+        props: {
+            sendSms: Function
+        },
+        components: {AccessConsent},
         data: () => {
             return {
-
+                inAgreementProcess: false,
+                getAgreementProcess: null,
+                ttl: null,
+                agreements: [],
                 stat: {
                     income: 36571644,
                     payments: 24310000,
@@ -408,26 +428,17 @@
 
                 return false;
             },
-            makeAgreement(zone) {
-                this.agreements.forEach(agreement => {
-                    if(agreement.name === zone) {
-                        agreement.orgs.push('Монополия')
-                        agreement.agree = true;
-                    }
-
-                    agreement.items.forEach(sub => {
-                        if(sub.name === zone) {
-                            agreement.orgs.push('Монополия')
-                            agreement.agree = true;
-                        }
-
-                    })
-                })
+            makeAgreement(zones) {
+                this.getAgreementProcess = zones;
+                this.ttl = new Date();
+                this.ttl.setDate(this.ttl.getDate() + 30);
+                this.inAgreementProcess = true;
             },
-            makeAgreements(zones) {
-                zones.forEach(zone => {
-                    this.makeAgreement(zone);
-                })
+            acceptAgreement(zones) {
+                this.agreements = [...this.agreements, ...zones];
+                this.inAgreementProcess = false;
+                this.getAgreementProcess = null;
+                this.ttl = null;
             }
         },
         computed: {
