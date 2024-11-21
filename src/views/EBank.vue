@@ -188,9 +188,13 @@
         mounted() {
           axios.get(getURL('e_bank/accounts')).then(res => {
               this.accounts = res.data;
+          }).catch(err => {
+              console.log(err)
           });
             axios.get(getURL('e_bank/loans')).then(res => {
                 this.loans = res.data;
+            }).catch(err => {
+                console.log(err)
             });
         },
         methods: {

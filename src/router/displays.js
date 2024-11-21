@@ -24,6 +24,12 @@ let displayList = [{
     img: require('@/assets/displays/monopoly.png'),
     description: 'Васян может выбирать здесь различные продукты',
     component: 'monopoly'
+}, {
+    id: 4,
+    name: 'Согласия',
+    img: require('@/assets/displays/consensts.png'),
+    description: 'Отзывать согласия',
+    component: 'consents'
 }
 ];
 

@@ -225,9 +225,13 @@
         mounted() {
             axios.get(getURL('style_bank/accounts')).then(res => {
                 this.accounts = res.data;
+            }).catch(err => {
+                console.log(err)
             });
             axios.get(getURL('style_bank/loans')).then(res => {
                 this.loans = res.data;
+            }).catch(err => {
+                console.log(err)
             });
         },
         computed: {

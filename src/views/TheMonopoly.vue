@@ -10,10 +10,12 @@
                         :key="`nav-product-${product.id}`"
                         :value="product.name">
                     <template v-slot:activator="{props}">
+
                         <v-list-item
                                 v-bind="props"
                                 :title="product.name"
                         ></v-list-item>
+
                     </template>
 
                     <v-list-item
@@ -44,7 +46,7 @@
                             Счета
                         </v-card-title>
                         <template v-if="true">
-                        <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`" class="px-2">
+                        <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`" class="pa-2">
                             <v-col cols="12" class="py-0">
                                 <v-card rounded="lg" elevation="0" style="background-color: rgba(255,255,255,0.5)">
                                     <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
@@ -107,54 +109,7 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12">
-                    <v-card variant="flat" rounded="lg">
 
-                        <template v-if="true">
-                        <v-row>
-                            <v-col cols="5">
-                                <v-card-title>
-                                    управление согласиями
-                                </v-card-title>
-                            </v-col>
-                            <v-col cols="2" >
-                                <v-card-title class="text-center">
-                                    Согласие
-                                </v-card-title>
-                            </v-col>
-                            <v-col cols="5">
-                                <v-card-title>
-                                    Поставщик услуг
-                                </v-card-title>
-                            </v-col>
-                        </v-row>
-
-                        <v-list>
-                            <v-list-item
-                                    density="compact"
-                                    v-for="agree of agreements" :key="agree.id"
-                            >
-                                <v-row>
-                                    <v-col cols="5">
-                                        {{agree.name}}
-                                    </v-col>
-                                    <v-col cols="2" class="d-flex flex-row justify-center">
-                                        <v-checkbox density="compact" v-model="agree.agree"></v-checkbox>
-                                    </v-col>
-                                    <v-col cols="5">
-                                        <v-select density="compact" v-model="agree.orgs" :items="financialOrgs" multiple></v-select>
-                                    </v-col>
-                                </v-row>
-
-                            </v-list-item>
-                        </v-list>
-                        </template>
-                        <template v-else>
-                            <v-card-title>
-                                Теперь нельзя управлять согласиями, доигрался!?
-                            </v-card-title>
-                            <v-skeleton-loader type="card"></v-skeleton-loader>
-                        </template>
-                    </v-card>
                 </v-col>
             </v-row>
         </div>
@@ -166,40 +121,13 @@
         name: "TheMonopoly",
         data: () => {
             return {
-                financialOrgs: [
-                    'Монополия'
-                ],
+
                 stat: {
                     income: 36571644,
                     payments: 24310000,
                     loansCount: 10,
                     loanRate: 70,
                 },
-                agreements: [{
-                    id: 0,
-                    name: 'Управление счетами',
-                    agree: false,
-                    items: [],
-                    orgs: []
-                }, {
-                    id: 1,
-                    name: 'Финансовые услуги',
-                    agree: false,
-                    items: [],
-                    orgs: []
-                }, {
-                    id: 2,
-                    name: 'Данные о доходах',
-                    agree: false,
-                    items: [],
-                    orgs: []
-                }, {
-                    id: 3,
-                    name: 'Управление согласиями',
-                    agree: true,
-                    items: [],
-                    orgs: ['Монополия']
-                }],
                 accounts: [
                     {
                         idx: 0,

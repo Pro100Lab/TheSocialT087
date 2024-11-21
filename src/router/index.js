@@ -3,6 +3,7 @@ import EBank from "@/views/EBank";
 import StyleBank from "@/views/StyleBank";
 import SMS from "@/views/SMS";
 import TheMonopoly from "@/views/TheMonopoly";
+import ConsentService from "@/views/ConsentService";
 
 const routes = [
   {
@@ -29,6 +30,10 @@ const routes = [
     path: '/monopoly',
     name: 'monopoly',
     component: TheMonopoly
+  }, {
+  path: '/consents',
+    name: 'consents',
+    component: ConsentService
   }
 ]
 
