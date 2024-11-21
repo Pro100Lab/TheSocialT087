@@ -1,8 +1,8 @@
 <template>
   <v-app>
 
-    <v-main class="main-display main-display__bg" :class="isMobile ? '' : 'pa-4'" v-if="!showPresentation">
-        <v-row dense :class="isMobile ? '' : 'mr-3'" >
+    <v-main class="main-display main-display__bg" :class="isMobile ? 'pa-2' : 'pa-4'" v-if="!showPresentation">
+        <v-row dense :class="isMobile ? '' : ''" >
 
           <v-col cols="12">
             <router-view :show-sms="showSMS" class="main-display__main-view"/>
