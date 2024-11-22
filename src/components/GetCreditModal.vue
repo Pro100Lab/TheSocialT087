@@ -44,6 +44,7 @@
         },
         methods: {
             calculateMonthlyPay() {
+                console.log('month pay calc: ', this.summ, this.term, this.date);
                 if( !this.summ || !this.term || !this.date)
                     return;
 
@@ -63,6 +64,9 @@
                 this.calculateMonthlyPay();
             },
             term: function () {
+                this.calculateMonthlyPay();
+            },
+            date: function () {
                 this.calculateMonthlyPay();
             }
         }
