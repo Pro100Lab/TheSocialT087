@@ -36,9 +36,9 @@
                 credit_sum: 0,
                 monthly_pay: 0,
                 term: 1,
-                date: '',
-                get_date: '',
-                repayment_date: '',
+                date: null,
+                get_date: null,
+                repayment_date: null,
                 documents: 'Паспорт',
             }
         },
