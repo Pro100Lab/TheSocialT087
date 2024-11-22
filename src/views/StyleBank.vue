@@ -147,10 +147,8 @@
                 loans: [{
                     id: 0,
                     name: 'Автокредит',
-                    nextPay: {
-                        get_date: (new Date(new Date().setDate(25))).toLocaleDateString(),
-                        monthly_pay: 25000
-                    },
+                    get_date: (new Date(new Date().setDate(25))).toLocaleDateString(),
+                    monthly_pay: 25000,
                     credit_sum: 88005553535,
                     actions: [{
                         id: 0,
