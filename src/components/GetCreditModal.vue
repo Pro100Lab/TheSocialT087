@@ -56,8 +56,8 @@
                     g_date.setMonth((new Date().getMonth() + 1) );
 
                     this.monthly_pay = parseInt(this.summ) / (this.term * 12 ) * 1.2
-                    this.repayment_date = rep_date.toISOString();
-                    this.get_date = g_date.toISOString();
+                    this.repayment_date = rep_date.toISOString().substr(0, 10);
+                    this.get_date = g_date.toISOString().substr(0, 10);
                 }
                 catch (e) {
                     this.monthly_pay = null
