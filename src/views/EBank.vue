@@ -204,7 +204,7 @@
                         this.accounts = res.data.filter(o => {return o.holder === this.clientId});
                         this.accounts.forEach(account => {
                             let offset = 0;
-                            account['name'] = `Счет-${offset++}`
+                            account['name'] = `Счет ${account.valute} ${offset++}`
                             account['actions'] = [{
                                 idx: 0,
                                 name: 'Оплатить',
