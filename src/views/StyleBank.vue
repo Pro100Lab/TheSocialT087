@@ -57,7 +57,7 @@
                             <v-card color="indigo" variant="flat" rounded="xl">
                                 <v-card-subtitle class="pt-4">{{loan.name}}</v-card-subtitle>
                                 <v-card-title class="py-0">{{Math.floor(loan.credit_sum / 100).toString().match(/\d{1,3}/g).join(' ')}},{{loan.credit_sum % 100}} ₽</v-card-title>
-                                <v-card-subtitle>Следующий платёж <b>{{loan.nextPay.monthly_pay}} ₽</b> <br/>{{loan.nextPay.get_date}} </v-card-subtitle>
+                                <v-card-subtitle>Следующий платёж <b>{{loan.monthly_pay}} ₽</b> <br/>{{loan.get_date}} </v-card-subtitle>
                                 <v-card-actions>
                                     <v-btn
                                             v-for="action of loan.actions"
@@ -277,13 +277,13 @@
                     console.log(err)
                 });
             },
-            takeLoan(summ, monthly_pay, date, repayment_date, documents) {
+            takeLoan(credit_sum, monthly_pay, date, repayment_date, documents) {
                 this.inGetCreditProcess = false;
                 axios.post(getURL('e_bank/loans'), {
                     borrower: this.clientId,
-                    credit_summ: summ,
+                    credit_credit_sum: credit_sum,
                     monthly_pay: monthly_pay,
-                    pay_rest: summ,
+                    pay_rest: credit_sum,
                     get_date: date,
                     repayment_date: repayment_date,
                     documents: documents

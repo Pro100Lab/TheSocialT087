@@ -3,7 +3,7 @@
         <v-card-title >
             Получение кредита
         </v-card-title>
-        <v-text-field label="сумма кредита" v-model="summ"></v-text-field>
+        <v-text-field label="сумма кредита" v-model="credit_sum"></v-text-field>
         <v-divider/>
 
         <v-card-text>
@@ -19,7 +19,7 @@
         <v-divider/>
 
         <v-card-actions>
-            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(summ, monthly_pay, get_date, repayment_date, documents)">Подтвердить заявку</v-btn>
+            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(credit_sum, monthly_pay, get_date, repayment_date, documents)">Подтвердить заявку</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -33,10 +33,10 @@
         },
         data: () => {
             return {
-                summ: null,
+                credit_sum: null,
                 monthly_pay: null,
                 term: null,
-                date: null,
+                date: null,$
                 get_date: null,
                 repayment_date: null,
                 documents: 'Паспорт',
@@ -44,8 +44,8 @@
         },
         methods: {
             calculateMonthlyPay() {
-                console.log('month pay calc: ', this.summ, this.term, this.date);
-                if( !this.summ || !this.term || !this.date)
+                console.log('month pay calc: ', this.credit_sum, this.term, this.date);
+                if( !this.credit_sum || !this.term || !this.date)
                     return;
 
                 try {
@@ -55,7 +55,7 @@
                     let g_date = new Date();
                     g_date.setMonth((new Date().getMonth() + 1) );
 
-                    this.monthly_pay = parseInt(this.summ) / (this.term * 12 ) * 1.2
+                    this.monthly_pay = parseInt(this.credit_sum) / (this.term * 12 ) * 1.2
                     this.repayment_date = rep_date.toISOString().substr(0, 10);
                     this.get_date = g_date.toISOString().substr(0, 10);
                 }
@@ -66,7 +66,7 @@
             }
         },
         watch: {
-            summ: function () {
+            credit_sum: function () {
                 this.calculateMonthlyPay();
             },
             term: function () {

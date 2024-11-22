@@ -260,14 +260,14 @@
                     console.log(err)
                 });
             },
-            takeLoan(summ, monthly_pay, date, repayment_date, documents) {
+            takeLoan(credit_sum, monthly_pay, date, repayment_date, documents) {
                 this.inGetCreditProcess = false;
 
                 axios.post(getURL('e_bank/loans'), {
                       borrower: this.clientId,
-                      credit_summ: summ,
+                      credit_summ: credit_sum,
                       monthly_pay: monthly_pay,
-                      pay_rest: summ,
+                      pay_rest: credit_sum,
                       get_date: date,
                     repayment_date: repayment_date,
                       documents: documents
