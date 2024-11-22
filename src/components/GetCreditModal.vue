@@ -33,12 +33,21 @@
         },
         data: () => {
             return {
+<<<<<<< Updated upstream
                 credit_sum: null,
                 monthly_pay: null,
                 term: null,
                 date: null,$
                 get_date: null,
                 repayment_date: null,
+=======
+                credit_sum: 0,
+                monthly_pay: 0,
+                term: 1,
+                date: '',
+                get_date: '',
+                repayment_date: '',
+>>>>>>> Stashed changes
                 documents: 'Паспорт',
             }
         },
