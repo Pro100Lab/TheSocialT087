@@ -203,6 +203,8 @@
                     axios.get(getURL(`e_bank/accounts`)).then(res => {
                         this.accounts = res.data.filter(o => {return o.holder === this.clientId});
                         this.accounts.forEach(account => {
+                            let offset = 0;
+                            account['name'] = `Счет-${offset++}`
                             account['actions'] = [{
                                 idx: 0,
                                 name: 'Оплатить',
@@ -219,6 +221,8 @@
                     axios.get(getURL('e_bank/loans')).then(res => {
                         this.loans = res.data.filter(o => {return o.borrower === this.clientId});
                         this.loans.forEach(loan => {
+                            let offset = 0;
+                            loan['name'] = `Кредит-${offset++}`
                             loan['actions'] = {
                                 idx: 0,
                                 name: 'Внести платёж',
