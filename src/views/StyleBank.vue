@@ -16,7 +16,7 @@
                     </v-icon>
                 </v-card-subtitle>
                 <template v-if="accounts.length > 0 && isCashOpened">
-                    <v-row v-for="account of accounts" :key="`bank-account-${account.idx || account.id}`">
+                    <v-row v-for="account of accounts" :key="`bank-account-${account.id || account.id}`">
                         <v-col xl="6" sm="12">
                             <v-card color="indigo" variant="flat" rounded="xl">
                                 <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
@@ -24,7 +24,7 @@
                                 <v-card-actions>
                                     <v-btn
                                             v-for="action of account.actions"
-                                            :key="`bank-account-action-${account.idx}-${action.idx}`"
+                                            :key="`bank-account-action-${account.id}-${action.id}`"
                                             v-on:click="processLink(action.link)"
                                             rounded="xl"
                                     >
@@ -52,7 +52,7 @@
                 </v-card-subtitle>
 
                 <template v-if="loans.length > 0 && isLoansOpened">
-                    <v-row v-for="loan of loans" :key="`bank-loan-${loan.idx}`">
+                    <v-row v-for="loan of loans" :key="`bank-loan-${loan.id}`">
                         <v-col xl="6" sm="12">
                             <v-card color="indigo" variant="flat" rounded="xl">
                                 <v-card-subtitle class="pt-4">{{loan.name}}</v-card-subtitle>
@@ -61,7 +61,7 @@
                                 <v-card-actions>
                                     <v-btn
                                             v-for="action of loan.actions"
-                                            :key="`bank-loan-action-${loan.idx || load.id}-${action.idx}`"
+                                            :key="`bank-loan-action-${loan ? (loan.id) : 0}-${action.id}`"
                                             v-on:click="processLink(action.link)"
                                             rounded="xl"
                                     >
@@ -89,7 +89,7 @@
                 </v-card-subtitle>
                 <template v-if="services.length > 0 && isServicesOpened">
                     <v-row class="overflow-x-auto flex-nowrap">
-                        <v-col v-for="service of services" :key="`service-${service.idx}`" xl="4" sm="12">
+                        <v-col v-for="service of services" :key="`service-${service.id}`" xl="4" sm="12">
                             <v-card color="indigo" rounded="xl">
                                 <v-card-title>
                                     {{service.title}}
@@ -100,7 +100,7 @@
                                 <v-card-actions v-if="service.actions.length && service.actions.length > 0">
                                     <v-btn
                                             v-for="action of service.actions"
-                                            :key="`service-action-${service.idx}-${action.idx}`"
+                                            :key="`service-action-${service.id}-${action.id}`"
                                             :block="service.actions.length === 1"
                                             v-on:click="processLink(action.link)"
                                             rounded="xl"
@@ -145,7 +145,7 @@
                 clientId: null,
                 openedProducts: ['Счета', 'Кредиты', 'Услуги'],
                 loans: [{
-                    idx: 0,
+                    id: 0,
                     name: 'Автокредит',
                     nextPay: {
                         get_date: (new Date(new Date().setDate(25))).toLocaleDateString(),
@@ -153,69 +153,69 @@
                     },
                     credit_sum: 88005553535,
                     actions: [{
-                        idx: 0,
+                        id: 0,
                         name: 'Внести платёж',
                         link: 'make-pay'
                     }, {
-                        idx: 1,
+                        id: 1,
                         name: 'Погасить досрочно',
                         link: 'repay-early'
                     }]
                 }],
                 accounts: [
                     {
-                        idx: 0,
+                        id: 0,
                         name: 'Счет для погашения кредита',
                         balance: 10,
                         valute: 'rub',
                         cards: [{
-                            idx: 0,
+                            id: 0,
                             number: '1111 1111 1111 1111'
                         }],
                         actions: [{
-                            idx: 0,
+                            id: 0,
                             name: 'Оплатить',
                             link: 'pay'
                         }, {
-                            idx: 1,
+                            id: 1,
                             name: 'Перевести',
                             link: 'transfer'
                         }]
                     }
                 ],
                 services: [{
-                    idx: 0,
+                    id: 0,
                     title: 'Взять кредит',
                     subtitle: 'Под выгодные 64% годовых',
                     actions: [{
-                        idx: 0,
+                        id: 0,
                         name: 'Оформить',
                         link: 'loan'
                     }]
                 }, {
-                    idx: 1,
+                    id: 1,
                     title: 'Открыть вклад',
                     subtitle: 'Под выгодные 0.5% годовых',
                     actions: [{
-                        idx: 0,
+                        id: 0,
                         name: 'Оформить',
                         link: 'deposit'
                     }]
                 }, {
-                    idx: 2,
+                    id: 2,
                     title: 'The S T Y L E',
                     subtitle: 'Бонусная программа. Бесплатно, если вы тратите больше 10 тысяч в месяц',
                     actions: [{
-                        idx: 0,
+                        id: 0,
                         name: 'Подключить',
                         link: 'stilsibo'
                     }]
                 }, {
-                    idx: 3,
+                    id: 3,
                     title: 'Оформить ипотеку',
                     subtitle: 'Оформите ипотеку бесплатно, без регистрации и смс',
                     actions: [{
-                        idx: 0,
+                        id: 0,
                         name: 'Оформить',
                         link: 'insurance'
                     }]
@@ -252,11 +252,11 @@
                           let offset = 0;
                           account['name'] = `Счет ${account.valute} ${offset++}`
                           account['actions'] = [{
-                              idx: 0,
+                              id: 0,
                               name: 'Оплатить',
                               link: 'pay'
                           }, {
-                              idx: 1,
+                              id: 1,
                               name: 'Перевести',
                               link: 'transfer'
                           }]
@@ -271,11 +271,11 @@
                           let offset = 0;
                           loan['name'] = `Кредит-${offset++}`
                           loan['actions'] = {
-                              idx: 0,
+                              id: 0,
                               name: 'Внести платёж',
                               link: 'make-pay'
                           }, {
-                              idx: 1,
+                              id: 1,
                               name: 'Погасить досрочно',
                               link: 'repay-early'
                           }

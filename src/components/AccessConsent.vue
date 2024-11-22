@@ -20,14 +20,20 @@
 
         <v-card-actions class="d-flex flex-row align-center justify-center">
 
-            <v-btn block v-if="!authorized"
+            <v-btn block
+                   :readonly="authorized"
                    v-on:click="authGosus">
                 Авторизоваться через гос.услуги
                 <v-icon class="ml-2" size="32">
                     <v-img src="../assets/gosus.svg"></v-img>
                 </v-icon>
             </v-btn>
-            <v-btn block v-else v-on:click="callback(requiredAgreements)" text="Даю согласие"> </v-btn>
+        </v-card-actions>
+        <v-text-field class="px-4" :readonly="code"  v-if="code" label="Введите код" v-model="code"></v-text-field>
+
+        <v-card-actions>
+            <v-btn block :readonly="!code" v-on:click="callback(requiredAgreements)" text="Даю согласие"> </v-btn>
+
         </v-card-actions>
     </v-card>
 </template>
@@ -46,12 +52,14 @@
         data: () => {
             return {
                 authorized: false,
+                code: null,
                 gosusLogo: require('@/assets/gosus.svg')
             }
         },
         methods: {
             authGosus() {
-                this.sendSms('gosuslugi', `Код для авторизации: ${Math.round(Math.random()*999)}-${Math.round(Math.random()*999)}`);
+                this.code = `${Math.round(Math.random()*999).toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping: false})}-${Math.round(Math.random()*999).toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping: false})}`
+                this.sendSms('gosuslugi', `Код для авторизации: ${this.code}`);
                 setTimeout(() => {
                     this.authorized = true;
                 }, 2000)

@@ -38,6 +38,7 @@
 
         </v-toolbar>
 
+        <template v-if="clientId">
         <div class="monopoly__main-container pa-3">
             <v-row>
                 <v-col xl="6" sm="12">
@@ -113,7 +114,11 @@
                 </v-col>
             </v-row>
         </div>
+        </template>
+        <template v-else>
+            <bank-auth bank-name="Монополия" bank-id="e_bank" :auth-callback="auth" :is-mobile="isMobile" ></bank-auth>
 
+        </template>
         <v-overlay scroll-strategy="block" class="align-center justify-center" v-model="inAgreementProcess">
             <access-consent
                     :sp="'Монополия'"
@@ -130,14 +135,17 @@
 
 <script>
     import AccessConsent from "@/components/AccessConsent";
+    import BankAuth from "@/components/BankAuth";
     export default {
         name: "TheMonopoly",
         props: {
-            sendSms: Function
+            sendSms: Function,
+            isMobile: Boolean
         },
-        components: {AccessConsent},
+        components: {BankAuth, AccessConsent},
         data: () => {
             return {
+                clientId: null,
                 inAgreementProcess: false,
                 getAgreementProcess: null,
                 ttl: null,
@@ -373,6 +381,9 @@
             this.calculateLoanRate();
         },
         methods: {
+            auth(clientId) {
+                this.clientId = clientId;
+            },
             calculateLoanRate() {
                 this.stat.loanRate = this.stat.payments / this.stat.income * 100
             },
