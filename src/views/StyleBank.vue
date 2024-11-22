@@ -20,7 +20,7 @@
                         <v-col xl="6" sm="12">
                             <v-card color="indigo" variant="flat" rounded="xl">
                                 <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
-                                <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}} ₽</v-card-title>
+                                <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}} {{account.valute}}</v-card-title>
                                 <v-card-actions>
                                     <v-btn
                                             v-for="action of account.actions"
@@ -149,6 +149,7 @@
                     name: 'Автокредит',
                     get_date: (new Date(new Date().setDate(25))).toLocaleDateString(),
                     monthly_pay: 25000,
+                    valute: 'rub',
                     credit_sum: 88005553535,
                     actions: [{
                         id: 0,

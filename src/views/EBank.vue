@@ -20,8 +20,7 @@
                     <v-col xl="6" sm="12">
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
-                            <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}}
-                                {{account.valute}}</v-card-title>
+                            <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}} {{account.valute}}</v-card-title>
                             <v-card-actions>
                                 <v-btn
                                         v-for="action of account.actions"
@@ -57,7 +56,7 @@
                     <v-col xl="6" sm="12">
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{loan.name}}</v-card-subtitle>
-                            <v-card-title class="py-0">{{loan.amount}} ₽</v-card-title>
+                            <v-card-title class="py-0">{{loan.pay_rest}} ₽</v-card-title>
                             <v-card-actions>
                                 <v-btn
                                         v-for="action of loan.actions"
@@ -146,7 +145,7 @@
                         id: 0,
                         name: 'Денежки',
                         balance: 24035632,
-                        currency: 'rub',
+                        valute: 'rub',
                         cards: [{
                             id: 0,
                             number: '1111 1111 1111 1111'
