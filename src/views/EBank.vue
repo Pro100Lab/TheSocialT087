@@ -1,6 +1,7 @@
 <template>
     <v-card color="#eff3f3" class="pa-4 overflow-y-auto">
 
+        <template v-if="clientId">
         <v-card-title>
             Е-банк | Выгодее с нами, чем без нас
         </v-card-title>
@@ -19,7 +20,7 @@
                     <v-col xl="6" sm="12">
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
-                            <v-card-title class="py-0">{{Math.floor(account.amount / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.amount % 100}} ₽</v-card-title>
+                            <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}} ₽</v-card-title>
                             <v-card-actions>
                                 <v-btn
                                         v-for="action of account.actions"
@@ -116,18 +117,27 @@
                 </v-card>
             </template>
         </div>
-
+        </template>
+        <template v-else>
+            <bank-auth style="height: 100%" :auth-callback="auth" :bank-id="'e_bank'" :bank-name="'Е-Банк'" :is-mobile="isMobile"></bank-auth>
+        </template>
     </v-card>
 </template>
 
 <script>
     import {getURL} from "@/utils/settings";
     import axios from 'axios';
+    import BankAuth from "@/components/BankAuth";
 
     export default {
         name: "EBank",
+        components: {BankAuth},
+        props: {
+            isMobile: Boolean
+        },
         data: () => {
             return {
+                clientId: null,
                 openedProducts: ['Счета', 'Услуги'],
                 loans: [],
                 accounts: [
@@ -186,18 +196,49 @@
             }
         },
         mounted() {
-          axios.get(getURL('e_bank/accounts')).then(res => {
-              this.accounts = res.data;
-          }).catch(err => {
-              console.log(err)
-          });
-            axios.get(getURL('e_bank/loans')).then(res => {
-                this.loans = res.data;
-            }).catch(err => {
-                console.log(err)
-            });
+        },
+        watch: {
+            clientId(newValue, oldValue) {
+                if( newValue && newValue !== oldValue ) {
+                    axios.get(getURL(`style_bank/accounts`)).then(res => {
+                        this.accounts = res.data.filter(o => {return o.holder === this.clientId});
+                        this.accounts.forEach(account => {
+                            account['actions'] = [{
+                                idx: 0,
+                                name: 'Оплатить',
+                                link: 'pay'
+                            }, {
+                                idx: 1,
+                                name: 'Перевести',
+                                link: 'transfer'
+                            }]
+                        })
+                    }).catch(err => {
+                        console.log(err)
+                    });
+                    axios.get(getURL('style_bank/loans')).then(res => {
+                        this.loans = res.data.filter(o => {return o.borrower === this.clientId});
+                        this.loans.forEach(loan => {
+                            loan['actions'] = {
+                                idx: 0,
+                                name: 'Внести платёж',
+                                link: 'make-pay'
+                            }, {
+                                idx: 1,
+                                name: 'Погасить досрочно',
+                                link: 'repay-early'
+                            }
+                        })
+                    }).catch(err => {
+                        console.log(err)
+                    });
+                }
+            }
         },
         methods: {
+            auth(clientId) {
+              this.clientId = clientId
+            },
             processLink(link) {
                 link;
             },

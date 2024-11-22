@@ -5,7 +5,7 @@
       <v-row dense :class="isMobile ? '' : ''" >
 
         <v-col cols="12">
-          <router-view :send-sms="showSMS" class="main-display__main-view"/>
+          <router-view :send-sms="showSMS" :is-mobile="isMobile" class="main-display__main-view"/>
         </v-col>
 
         <v-col v-if="!isMobile" cols="12">
