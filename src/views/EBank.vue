@@ -121,6 +121,17 @@
         <template v-else>
             <bank-auth style="height: 100%" :auth-callback="auth" :bank-id="'e_bank'" :bank-name="'Е-Банк'" :is-mobile="isMobile"></bank-auth>
         </template>
+
+        <v-overlay v-model="inGetCreditProcess" scroll-strategy="block" class="align-center justify-center">
+            <get-credit-modal :is-mobile="isMobile" :take-loan="takeLoan"></get-credit-modal>
+        </v-overlay>
+
+        <v-overlay v-model="inIncorrectLinkProcess" scroll-strategy="block" class="align-center justify-center">
+            <v-card rounded="xxl">
+                <v-card-title>К сожалению, в данный момент услуга недоступна</v-card-title>
+                <v-card-actions><v-btn v-on:click="inIncorrectLinkProcess = false">Грустно :(</v-btn></v-card-actions>
+            </v-card>
+        </v-overlay>
     </v-card>
 </template>
 
@@ -128,15 +139,18 @@
     import {getURL} from "@/utils/settings";
     import axios from 'axios';
     import BankAuth from "@/components/BankAuth";
+    import GetCreditModal from "@/components/GetCreditModal";
 
     export default {
         name: "EBank",
-        components: {BankAuth},
+        components: {GetCreditModal, BankAuth},
         props: {
             isMobile: Boolean
         },
         data: () => {
             return {
+                inIncorrectLinkProcess: false,
+                inGetCreditProcess: false,
                 clientId: null,
                 openedProducts: ['Счета', 'Услуги'],
                 loans: [],
@@ -200,51 +214,76 @@
         watch: {
             clientId(newValue, oldValue) {
                 if( newValue && newValue !== oldValue ) {
-                    axios.get(getURL(`e_bank/accounts`)).then(res => {
-                        this.accounts = res.data.filter(o => {return o.holder === this.clientId});
-                        this.accounts.forEach(account => {
-                            let offset = 0;
-                            account['name'] = `Счет ${account.valute} ${offset++}`
-                            account['actions'] = [{
-                                id: 0,
-                                name: 'Оплатить',
-                                link: 'pay'
-                            }, {
-                                id: 1,
-                                name: 'Перевести',
-                                link: 'transfer'
-                            }]
-                        })
-                    }).catch(err => {
-                        console.log(err)
-                    });
-                    axios.get(getURL('e_bank/loans')).then(res => {
-                        this.loans = res.data.filter(o => {return o.borrower === this.clientId});
-                        this.loans.forEach(loan => {
-                            let offset = 0;
-                            loan['name'] = `Кредит-${offset++}`
-                            loan['actions'] = {
-                                id: 0,
-                                name: 'Внести платёж',
-                                link: 'make-pay'
-                            }, {
-                                id: 1,
-                                name: 'Погасить досрочно',
-                                link: 'repay-early'
-                            }
-                        })
-                    }).catch(err => {
-                        console.log(err)
-                    });
+                    this.updateAccounts();
+                    this.updateLoans();
                 }
             }
         },
         methods: {
+            updateAccounts() {
+                axios.get(getURL(`e_bank/accounts`)).then(res => {
+                    this.accounts = res.data.filter(o => {return o.holder === this.clientId});
+                    this.accounts.forEach(account => {
+                        let offset = 0;
+                        account['name'] = `Счет ${account.valute} ${offset++}`
+                        account['actions'] = [{
+                            id: 0,
+                            name: 'Оплатить',
+                            link: 'pay'
+                        }, {
+                            id: 1,
+                            name: 'Перевести',
+                            link: 'transfer'
+                        }]
+                    })
+                }).catch(err => {
+                    console.log(err)
+                });
+            },
+            updateLoans() {
+                axios.get(getURL('e_bank/loans')).then(res => {
+                    this.loans = res.data.filter(o => {return o.borrower === this.clientId});
+                    this.loans.forEach(loan => {
+                        let offset = 0;
+                        loan['name'] = `Кредит-${offset++}`
+                        loan['actions'] = [{
+                            id: 0,
+                            name: 'Внести платёж',
+                            link: 'make-pay'
+                        }, {
+                            id: 1,
+                            name: 'Погасить досрочно',
+                            link: 'repay-early'
+                        }]
+                    })
+                }).catch(err => {
+                    console.log(err)
+                });
+            },
+            takeLoan(summ, monthly_pay, date, repaiment_date, documents) {
+                this.inGetCreditProcess = false;
+
+                axios.post(getURL('e_bank/loans'), {
+                      borrower: this.clientId,
+                      credit_summ: summ,
+                      monthly_pay: monthly_pay,
+                      pay_rest: summ,
+                      get_date: date,
+                      repaiment_date: repaiment_date,
+                      documents: documents
+                  }).then(() => {
+                    this.updateLoans();
+                  }).catch(err => {console.log(err)})
+            },
             auth(clientId) {
               this.clientId = clientId
             },
             processLink(link) {
-                link;
+                if( link === 'loan' ) {
+                    this.inGetCreditProcess = true;
+                } else {
+                    this.inIncorrectLinkProcess = true;
+                }
             },
             isOpened (product) {
                 return this.openedProducts.indexOf(product) !== -1;
