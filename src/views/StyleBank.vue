@@ -129,7 +129,7 @@
 
 
         <v-overlay v-model="inGetCreditProcess" scroll-strategy="block" class="align-center justify-center">
-            <get-credit-modal style="max-height: 60vh; overflow-y: auto" :is-mobile="isMobile" :take-loan="takeLoan"></get-credit-modal>
+            <get-credit-modal style="max-height: 80vh; overflow-y: auto" :is-mobile="isMobile" :take-loan="takeLoan"></get-credit-modal>
         </v-overlay>
 
         <v-overlay v-model="inIncorrectLinkProcess" scroll-strategy="block" class="align-center justify-center">
