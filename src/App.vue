@@ -44,8 +44,8 @@
       <v-card-title>{{sms.number}}</v-card-title>
       <v-card-text>{{sms.text}}</v-card-text>
       <v-card-actions>
-        <v-btn>Ответить</v-btn>
-        <v-btn>Прочитано</v-btn>
+        <v-btn rounded="xl">Ответить</v-btn>
+        <v-btn rounded="xl">Прочитано</v-btn>
       </v-card-actions>
     </v-card>
   </v-app>

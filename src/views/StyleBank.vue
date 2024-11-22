@@ -129,13 +129,13 @@
 
 
         <v-overlay v-model="inGetCreditProcess" scroll-strategy="block" class="align-center justify-center">
-            <get-credit-modal :is-mobile="isMobile" :take-loan="takeLoan"></get-credit-modal>
+            <get-credit-modal style="max-height: 60vh; overflow-y: auto" :is-mobile="isMobile" :take-loan="takeLoan"></get-credit-modal>
         </v-overlay>
 
         <v-overlay v-model="inIncorrectLinkProcess" scroll-strategy="block" class="align-center justify-center">
-            <v-card rounded="xxl">
+            <v-card rounded="xl">
                 <v-card-title>К сожалению, в данный момент услуга недоступна</v-card-title>
-                <v-card-actions><v-btn v-on:click="inIncorrectLinkProcess = false">Грустно :(</v-btn></v-card-actions>
+                <v-card-actions><v-btn rounded="xl" v-on:click="inIncorrectLinkProcess = false">Грустно :(</v-btn></v-card-actions>
             </v-card>
         </v-overlay>
     </v-card>
