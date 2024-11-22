@@ -49,7 +49,7 @@
                 try {
                     this.monthly_pay = parseInt(this.summ) / this.term * 1.2
                     this.repayment_date = (new Date().setFullYear((new Date().getFullYear()) + this.term));
-                    this.date = (new Date().setMonth((new Date().getMonth() + 1)));
+                    this.date = this.repayment_date;
                 }
                 catch (e) {
                     this.monthly_pay = null
