@@ -49,9 +49,15 @@
                     return;
 
                 try {
+                    let rep_date = new Date();
+                    rep_date.setFullYear((new Date().getFullYear()) + this.term);
+
+                    let g_date = new Date();
+                    g_date.setMonth((new Date().getMonth() + 1) );
+
                     this.monthly_pay = parseInt(this.summ) / (this.term * 12 ) * 1.2
-                    this.repayment_date = (new Date().setFullYear((new Date().getFullYear()) + this.term));
-                    this.get_date = (new Date().setMonth((new Date().getMonth() + 1) ) );
+                    this.repayment_date = rep_date;
+                    this.get_date = g_date;
                 }
                 catch (e) {
                     this.monthly_pay = null
