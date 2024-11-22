@@ -19,7 +19,7 @@
         <v-divider/>
 
         <v-card-actions>
-            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(summ, monthly_pay, date, repaiment_date, documents)">Подтвердить заявку</v-btn>
+            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(summ, monthly_pay, date, repayment_date, documents)">Подтвердить заявку</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -37,7 +37,7 @@
                 monthly_pay: null,
                 term: null,
                 date: null,
-                repaiment_date: null,
+                repayment_date: null,
                 documents: 'Паспорт',
             }
         },
@@ -48,7 +48,7 @@
 
                 try {
                     this.monthly_pay = parseInt(this.summ) / this.term * 1.2
-                    this.repaiment_date = (new Date().setFullYear((new Date().getFullYear()) + this.term));
+                    this.repayment_date = (new Date().setFullYear((new Date().getFullYear()) + this.term));
                 }
                 catch (e) {
                     this.monthly_pay = null
