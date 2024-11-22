@@ -57,6 +57,7 @@
                         <v-card variant="flat" rounded="xl">
                             <v-card-subtitle class="pt-4">{{loan.name}}</v-card-subtitle>
                             <v-card-title class="py-0">{{loan.pay_rest}} ₽</v-card-title>
+                            <v-card-subtitle>Следующий платёж <b>{{loan.monthly_pay}} ₽</b> <br/>{{loan.get_date}} </v-card-subtitle>
                             <v-card-actions>
                                 <v-btn
                                         v-for="action of loan.actions"
