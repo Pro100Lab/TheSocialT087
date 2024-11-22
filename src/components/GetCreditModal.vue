@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-4">
+    <v-card class="pa-4 overflow-y-auto" style="max-height: 80%" >
         <v-card-title >
             Получение кредита
         </v-card-title>
@@ -19,7 +19,7 @@
         <v-divider/>
 
         <v-card-actions>
-            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(summ, monthly_pay, date, repayment_date, documents)">Подтвердить заявку</v-btn>
+            <v-btn :readonly="!monthly_pay" block v-on:click="takeLoan(summ, monthly_pay, get_date, repayment_date, documents)">Подтвердить заявку</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -37,19 +37,20 @@
                 monthly_pay: null,
                 term: null,
                 date: null,
+                get_date: null,
                 repayment_date: null,
                 documents: 'Паспорт',
             }
         },
         methods: {
             calculateMonthlyPay() {
-                if( !this.summ || !this.term )
+                if( !this.summ || !this.term || !this.date)
                     return;
 
                 try {
-                    this.monthly_pay = parseInt(this.summ) / this.term * 1.2
+                    this.monthly_pay = parseInt(this.summ) / (this.term * 12 ) * 1.2
                     this.repayment_date = (new Date().setFullYear((new Date().getFullYear()) + this.term));
-                    this.date = this.repayment_date;
+                    this.get_date = (new Date().setMonth((new Date().getMonth() + 1) ) );
                 }
                 catch (e) {
                     this.monthly_pay = null
