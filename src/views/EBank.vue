@@ -200,7 +200,7 @@
         watch: {
             clientId(newValue, oldValue) {
                 if( newValue && newValue !== oldValue ) {
-                    axios.get(getURL(`style_bank/accounts`)).then(res => {
+                    axios.get(getURL(`e_bank/accounts`)).then(res => {
                         this.accounts = res.data.filter(o => {return o.holder === this.clientId});
                         this.accounts.forEach(account => {
                             account['actions'] = [{
@@ -216,7 +216,7 @@
                     }).catch(err => {
                         console.log(err)
                     });
-                    axios.get(getURL('style_bank/loans')).then(res => {
+                    axios.get(getURL('e_bank/loans')).then(res => {
                         this.loans = res.data.filter(o => {return o.borrower === this.clientId});
                         this.loans.forEach(loan => {
                             loan['actions'] = {
