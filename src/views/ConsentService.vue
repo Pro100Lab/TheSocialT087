@@ -79,7 +79,7 @@
                     </v-list-group>
 
                 </v-list>
-                <v-btn v-on:click="recallAll" variant="flat">Отозвать все согласия</v-btn>
+                <v-btn v-on:click="recallAll" variant="flat" >Отозвать все согласия</v-btn>
             </template>
             <template v-else-if="state==='give-agree'">
                 <v-sheet style="width: 70%" class="mx-auto my-10">
@@ -120,11 +120,7 @@
         },
         watch: {
             clientId: function () {
-                axios.get(getURL('consents/consent')).then(res => {
-                    console.log(res);
-                    this.allConsents = res.data;
-                    this.handleConsents();
-                }).catch(err=> {console.log(err)})
+               this.updateConsents();
             }
         },
         mounted() {
@@ -237,6 +233,13 @@
             }
         },
         methods: {
+            updateConsents() {
+                axios.get(getURL('consents/consent')).then(res => {
+                    console.log(res);
+                    this.allConsents = res.data;
+                    this.handleConsents();
+                }).catch(err=> {console.log(err)})
+            },
             handleConsents() {
                 this.consents = this.allConsents;
                 this.consents.filter(o => {
@@ -251,6 +254,8 @@
                     agree.items.forEach(consent => {
                         if(this.consentKeys.indexOf(consent.name) !== -1) {
                             consent.agree = true;
+                        } else {
+                            consent.agree = false;
                         }
                     })
                 })
@@ -258,8 +263,11 @@
             getConsentKey(consent) {
                 return `${consent.scope}/${consent.agent}/${consent.agent_client}`
             },
-            recallAll() {
-
+            async recallAll() {
+                for (const consent of this.consents) {
+                    await axios.delete(getURL(`consents/consents/${consent.id}`));
+                }
+                this.updateConsents();
             },
             auth(clientId) {
                 this.clientId = clientId;
