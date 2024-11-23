@@ -417,6 +417,7 @@
         watch: {
           clientId: function () {
               this.getAccounts();
+              this.loadConsents();
           }
         },
         methods: {
