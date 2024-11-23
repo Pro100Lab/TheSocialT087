@@ -110,7 +110,22 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12">
-
+                    <v-card>
+                        <v-card-title>Сделки</v-card-title>
+                        <v-list>
+                            <v-list-item v-for="deal of deals" :key="deal.id" :title="deal.name" append-icon="mdi-coin"></v-list-item>
+                            <v-list-item-action><v-btn block>Продолжить</v-btn></v-list-item-action>
+                        </v-list>
+                    </v-card>
+                </v-col>
+                <v-col cols="12">
+                    <v-card>
+                        <v-card-title>Доска объявления</v-card-title>
+                        <v-list>
+                            <v-list-item v-for="deal of market" :key="deal.id" :title="deal.name" append-icon="mdi-coin"></v-list-item>
+                        <v-list-item-action><v-btn block>Провести сделку</v-btn></v-list-item-action>
+                        </v-list>
+                    </v-card>
                 </v-col>
             </v-row>
         </div>
@@ -165,6 +180,16 @@
         components: {BankAuth, AccessConsent},
         data: () => {
             return {
+                deals: [
+                    {id: 1,
+                    name: 'Покупка квартиры'}
+                ],
+                market: [{
+                    id: 0,
+                    name: 'Куплю 1000$ за 150000 Р.',
+                    who: 'Петров А.Н.',
+                   actions: ['Обсудить', 'Купить']
+                }],
                 myId: '08d8f566-2be0-44df-8a21-ab3e14c28e1b',
                 showRecommends: false,
                 clientId: null,
