@@ -70,7 +70,7 @@
                         scope: agree,
                         expire_date_time: this.ttl,
                         agent: this.agent,
-                        agent_client: this.agent_client,
+                        agent_client: this.agentClient,
                         contragent: this.contragent,
                         agreement: true,
                     })
