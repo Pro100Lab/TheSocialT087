@@ -51,7 +51,7 @@
                             <v-col cols="12" class="py-0">
                                 <v-card rounded="lg" elevation="0" style="background-color: rgba(255,255,255,0.5)">
                                     <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
-                                    <v-card-title class="py-0">{{Math.floor(account.amount / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.amount % 100}} ₽</v-card-title>
+                                    <v-card-title class="py-0">{{Math.floor(account.balance / 100).toString().match(/\d{1,3}/g).join(' ')}},{{account.balance % 100}} {{account.valute}}</v-card-title>
                                     <v-card-actions>
                                         <v-btn
                                                 v-for="action of account.actions"
@@ -407,6 +407,7 @@
         methods: {
             getAccounts() {
                 axios.get(getURL(`e_bank/accounts`)).then(res => {
+                    this.accounts = [];
                     const accounts = res.data.filter(o => {return o.holder === this.clientId});
                     accounts.forEach(account => {
                         let offset = 0;
