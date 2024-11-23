@@ -247,7 +247,7 @@
                 })
 
                 this.consents.forEach(o => {
-                    this.consentKeys.push[o.scope] = o.agent;
+                    this.consentKeys[o.scope] = o.agent;
                 })
 
                 console.log('consents keys: ', this.consentKeys)
