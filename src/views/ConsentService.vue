@@ -250,11 +250,16 @@
                     this.consentKeys.push[o.scope] = o.agent;
                 })
 
+                console.log('consents keys: ', this.consentKeys)
+
                 this.agreements.forEach(agree=> {
                     agree.items.forEach(consent => {
+                        console.log('name: ', consent.name, ' consent: ', consent)
                         if(consent.name in this.consentKeys) {
                             consent.agree = true;
                             consent.orgs.push(this.consentKeys[consent.name])
+                            console.log('consents keys: ', this.consentKeys)
+
                         } else {
                             consent.agree = false;
                             consent.orgs = [];

@@ -540,13 +540,18 @@
             loadConsents() {
                 axios.get(getURL('consents/consent')).then(res => {
                     this.consents = res.data;
+                    console.log('client: ', this.clientId)
                     this.consents.filter(o => {
                         return (o.agent_client === this.clientId && o.agent === this.myId)
                     });
+                    console.log('filtered consents: ', this.consents)
 
                     this.consents.forEach(consent => {
                         this.agreements.push(consent.scope);
                     })
+
+                    console.log('agreements: ', this.agreements)
+
                 }).catch(err => {console.log(err)})
             }
         },
