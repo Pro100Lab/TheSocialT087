@@ -94,7 +94,7 @@
                         </v-card>
 
                         <v-card-actions>
-                            <v-btn block>
+                            <v-btn block v-on:click="showRecommends=true">
                                 Советы и рекомендации <v-icon icon="mdi-chevron-right"></v-icon>
                             </v-btn>
                         </v-card-actions>
@@ -130,6 +130,21 @@
 
             </access-consent>
         </v-overlay>
+
+        <v-overlay scroll-strategy="block" class="align-center justify-center" v-model="showRecommends">
+            <v-card>
+                <v-card-title>
+                    Рекомендации
+                </v-card-title>
+                <v-card-subtitle>
+                    <v-icon icon="mdi-circle"></v-icon>Если ваш прогресс-бар больше красного цвета - вам необходимо снизить кредитную нагрузку: закрыть кредитные карты,
+                    досрочно погасить кредиты
+                </v-card-subtitle>
+                <v-card-subtitle>
+                    <v-icon icon="mdi-cricle"></v-icon>Если ваш прогресс-бар больше зелёного цвета - берите кредиты, сколько хотите!
+                </v-card-subtitle>
+            </v-card>
+        </v-overlay>
     </v-card>
 </template>
 
@@ -145,6 +160,7 @@
         components: {BankAuth, AccessConsent},
         data: () => {
             return {
+                showRecommends: false,
                 clientId: null,
                 inAgreementProcess: false,
                 getAgreementProcess: null,

@@ -67,7 +67,7 @@
                                     ></v-checkbox>
                                 </v-col>
                                 <v-col cols="3">
-                                    <v-select density="compact" v-model="subagree.orgs" :items="financialOrgs" multiple></v-select>
+                                    <v-select density="compact" v-model="subagree.orgs" :items="financialOrgs" item-title="name" item-value="id" multiple></v-select>
                                 </v-col>
                                 <v-col cols="2">
                                     <v-date-input></v-date-input>
@@ -82,7 +82,7 @@
             </template>
             <template v-else-if="state==='give-agree'">
                 <v-sheet style="width: 70%" class="mx-auto my-10">
-                    <v-select label="Организация" :items="financialOrgs" ></v-select>
+                    <v-select label="Организация" :items="financialOrgs" item-title="name" item-value="id"></v-select>
                     <v-textarea label="Токен согласия">
 
                     </v-textarea>
@@ -106,15 +106,34 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     import BankAuth from "@/components/BankAuth";
+    import {getURL} from "@/utils/settings";
+
     export default {
         name: "ConsentService",
         components: {BankAuth},
         props: {
             isMobile: Boolean,
         },
+        watch: {
+          clientId: function () {
+              axios.get(getURL('consents/consent')).then(res => {
+                  console.log(res);
+              })
+          }
+        },
+        mounted() {
+          axios.get(getURL('consents/agent')).then(res => {
+              this.financialOrgs = res.data;
+          })
+        },
         data: () => {
             return {
+                allAgents: [{
+
+                }],
                 clientId: null,
                 state: 'agreements',
                 consentServices: [
@@ -123,10 +142,9 @@
                 ],
 
                 showProducts: false,
-                financialOrgs: [
-                    'Монополия',
-                    'Финансовые услуги',
-                    'ООО "Банкротство"'
+                financialOrgs: [{id: 0, name: 'Монополия'},
+                    {id: 1, name: 'Финансовые услуги'},
+                    { id: 2, name: 'ООО "Банкротство"'}
                 ],
                 agreements: [{
                     id: 0,
