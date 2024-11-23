@@ -66,14 +66,19 @@
             async createConsents() {
                 // eslint-disable-next-line no-unused-vars
                 for (const agree of this.requiredAgreements) {
-                    await axios.post(getURL('consents/consent'), {
-                        scope: agree,
-                        expire_date_time: this.ttl,
-                        agent: this.agent,
-                        agent_client: this.agentClient,
-                        contragent: this.contragent,
-                        agreement: true,
-                    })
+                    try {
+                        await axios.post(getURL('consents/consent'), {
+                            scope: agree,
+                            expire_date_time: this.ttl,
+                            agent: this.agent,
+                            agent_client: this.agentClient,
+                            contragent: this.contragent,
+                            agreement: true,
+                        })
+                    }
+                   catch (e) {
+                       console.error(e);
+                   }
                 }
                 this.callback();
             },
