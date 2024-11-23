@@ -267,7 +267,7 @@
             },
             async recallAll() {
                 for (const consent of this.consents) {
-                    await axios.delete(getURL(`consents/consents/${consent.id}`));
+                    await axios.delete(getURL(`consents/consent/${consent.id}`));
                 }
                 this.updateConsents();
             },
