@@ -79,6 +79,7 @@
                     </v-list-group>
 
                 </v-list>
+                <v-btn v-on:click="recallAll" variant="flat">Отозвать все согласия</v-btn>
             </template>
             <template v-else-if="state==='give-agree'">
                 <v-sheet style="width: 70%" class="mx-auto my-10">
@@ -118,21 +119,44 @@
             isMobile: Boolean,
         },
         watch: {
-          clientId: function () {
-              axios.get(getURL('consents/consent')).then(res => {
-                  console.log(res);
-              })
-          }
+            clientId: function () {
+                axios.get(getURL('consents/consent')).then(res => {
+                    console.log(res);
+                    this.allConsents = res.data;
+                    this.handleConsents();
+                }).catch(err=> {console.log(err)})
+            }
         },
         mounted() {
-          axios.get(getURL('consents/agent')).then(res => {
-              this.financialOrgs = res.data;
-          })
+            axios.get(getURL('consents/agent')).then(res => {
+                this.financialOrgs = res.data;
+            }).catch(err=> {console.log(err)})
         },
         data: () => {
             return {
-                allAgents: [{
-
+                consentKeys: [],
+                myId: '08d8f566-2be0-44df-8a21-ab3e14c28e1b',
+                allConsents: [
+                    {
+                        "id": "5420f785-f6d0-4091-a96b-8da75d3ffab0",
+                        "scope": "Кредитная история",
+                        "expire_date_time": "2024-11-23T06:26:31.503000Z",
+                        "expire_transaction": null,
+                        "agent": "08d8f566-2be0-44df-8a21-ab3e14c28e1b",
+                        "agent_client": "75f392fb-3e83-47c1-a0c6-6a65f2d67102",
+                        "contragent": "91c51bb0-e860-42ae-92af-683a76f47611",
+                        "agreement": true
+                    }
+                ],
+                consents: [{
+                    "id": "5420f785-f6d0-4091-a96b-8da75d3ffab0",
+                    "scope": "Кредитная история",
+                    "expire_date_time": "2024-11-23T06:26:31.503000Z",
+                    "expire_transaction": null,
+                    "agent": "08d8f566-2be0-44df-8a21-ab3e14c28e1b",
+                    "agent_client": "75f392fb-3e83-47c1-a0c6-6a65f2d67102",
+                    "contragent": "91c51bb0-e860-42ae-92af-683a76f47611",
+                    "agreement": true
                 }],
                 clientId: null,
                 state: 'agreements',
@@ -142,9 +166,32 @@
                 ],
 
                 showProducts: false,
-                financialOrgs: [{id: 0, name: 'Монополия'},
-                    {id: 1, name: 'Финансовые услуги'},
-                    { id: 2, name: 'ООО "Банкротство"'}
+                financialOrgs: [
+                    {
+                        "id": "91c51bb0-e860-42ae-92af-683a76f47611",
+                        "name": "e_bank",
+                        "api_address": "http://spacecraft-it.ru/api/e_bank/api"
+                    },
+                    {
+                        "id": "941ba5f9-5f57-4e9e-9619-d078321d614e",
+                        "name": "e_bank_loclahost",
+                        "api_address": "http://localhost:8000/api/e_bank/api"
+                    },
+                    {
+                        "id": "08d8f566-2be0-44df-8a21-ab3e14c28e1b",
+                        "name": "Монополия",
+                        "api_address": "https://127.0.0.1"
+                    },
+                    {
+                        "id": "b598ad2a-1f09-4bd1-a92e-bc85a8deff11",
+                        "name": "ООО Финансовые услуги",
+                        "api_address": "https://127.0.0.1"
+                    },
+                    {
+                        "id": "6e989065-5c91-4c7f-9a7c-515222a37b58",
+                        "name": "ООО Банкротство",
+                        "api_address": "https://127.0.0.1"
+                    }
                 ],
                 agreements: [{
                     id: 0,
@@ -164,7 +211,7 @@
                     agree: false,
                     items: [{
                         id: 7,
-                        name: 'Кредитная истории'
+                        name: 'Кредитная история'
                     }, {
                         id: 8,
                         name: 'Получение заёмов'
@@ -185,13 +232,37 @@
                     name: 'Управление согласиями',
                     agree: false,
                     items: [],
-                    orgs: ['Монополия']
+                    orgs: ['08d8f566-2be0-44df-8a21-ab3e14c28e1b']
                 }]
             }
         },
         methods: {
+            handleConsents() {
+                this.consents = this.allConsents;
+                this.consents.filter(o => {
+                    return (o.agent_client === this.clientId)
+                })
+
+                this.consents.forEach(o => {
+                    this.consentKeys.push(o.scope);
+                })
+
+                this.agreements.forEach(agree=> {
+                    agree.items.forEach(consent => {
+                        if(this.consentKeys.indexOf(consent.name) !== -1) {
+                            consent.agree = true;
+                        }
+                    })
+                })
+            },
+            getConsentKey(consent) {
+                return `${consent.scope}/${consent.agent}/${consent.agent_client}`
+            },
+            recallAll() {
+
+            },
             auth(clientId) {
-              this.clientId = clientId;
+                this.clientId = clientId;
             },
             changeAgree(state) {
                 this.state = state;

@@ -151,6 +151,8 @@
 <script>
     import AccessConsent from "@/components/AccessConsent";
     import BankAuth from "@/components/BankAuth";
+    import axios from "axios";
+    import {getURL} from "@/utils/settings";
     export default {
         name: "TheMonopoly",
         props: {
@@ -160,6 +162,7 @@
         components: {BankAuth, AccessConsent},
         data: () => {
             return {
+                myId: '08d8f566-2be0-44df-8a21-ab3e14c28e1b',
                 showRecommends: false,
                 clientId: null,
                 inAgreementProcess: false,
@@ -396,7 +399,55 @@
         mounted() {
             this.calculateLoanRate();
         },
+        watch: {
+          clientId: function () {
+              this.getAccounts();
+          }
+        },
         methods: {
+            getAccounts() {
+                axios.get(getURL(`e_bank/accounts`)).then(res => {
+                    const accounts = res.data.filter(o => {return o.holder === this.clientId});
+                    accounts.forEach(account => {
+                        let offset = 0;
+                        account['name'] = `Счет ${account.valute} ${offset++}`
+                        account['actions'] = [{
+                            id: 0,
+                            name: 'Оплатить',
+                            link: 'pay'
+                        }, {
+                            id: 1,
+                            name: 'Перевести',
+                            link: 'transfer'
+                        }];
+
+                        this.accounts.push(account);
+                    })
+                }).catch(err => {
+                    console.log(err)
+                });
+
+                axios.get(getURL(`style_bank/accounts`)).then(res => {
+                    const accounts = res.data.filter(o => {return o.holder === this.clientId});
+                    accounts.forEach(account => {
+                        let offset = 0;
+                        account['name'] = `Счет ${account.valute} ${offset++}`
+                        account['actions'] = [{
+                            id: 0,
+                            name: 'Оплатить',
+                            link: 'pay'
+                        }, {
+                            id: 1,
+                            name: 'Перевести',
+                            link: 'transfer'
+                        }];
+
+                        this.accounts.push(account);
+                    })
+                }).catch(err => {
+                    console.log(err)
+                });
+            },
             auth(clientId) {
                 this.clientId = clientId;
             },
