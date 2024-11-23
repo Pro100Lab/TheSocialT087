@@ -255,6 +255,7 @@
                     return (o.agent_client === this.clientId)
                 })
 
+                this.consentKeys = {};
                 this.consents.forEach(o => {
                     this.consentKeys[o.scope] = o.agent;
                 })
