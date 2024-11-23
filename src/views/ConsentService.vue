@@ -130,7 +130,7 @@
         },
         data: () => {
             return {
-                consentKeys: [],
+                consentKeys: {},
                 myId: '08d8f566-2be0-44df-8a21-ab3e14c28e1b',
                 allConsents: [
                     {
@@ -247,15 +247,17 @@
                 })
 
                 this.consents.forEach(o => {
-                    this.consentKeys.push(o.scope);
+                    this.consentKeys.push[o.scope] = o.agent;
                 })
 
                 this.agreements.forEach(agree=> {
                     agree.items.forEach(consent => {
-                        if(this.consentKeys.indexOf(consent.name) !== -1) {
+                        if(consent.name in this.consentKeys) {
                             consent.agree = true;
+                            consent.orgs.push(this.consentKeys[consent.name])
                         } else {
                             consent.agree = false;
+                            consent.orgs = [];
                         }
                     })
                 })
