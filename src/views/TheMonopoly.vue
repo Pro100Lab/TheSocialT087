@@ -122,6 +122,9 @@
         <v-overlay scroll-strategy="block" class="align-center justify-center" v-model="inAgreementProcess">
             <access-consent
                     :sp="'Монополия'"
+                    :agent="myId"
+                    :contragent="myId"
+                    :agent-client="clientId"
                     :required-agreements="getAgreementProcess"
                     :callback="acceptAgreement"
                     :send-sms="sendSms"
@@ -175,6 +178,18 @@
                     loansCount: 10,
                     loanRate: 70,
                 },
+                consents: [
+                    {
+                        "id": "5420f785-f6d0-4091-a96b-8da75d3ffab0",
+                        "scope": "Кредитная история",
+                        "expire_date_time": "2024-11-23T06:26:31.503000Z",
+                        "expire_transaction": null,
+                        "agent": "08d8f566-2be0-44df-8a21-ab3e14c28e1b",
+                        "agent_client": "75f392fb-3e83-47c1-a0c6-6a65f2d67102",
+                        "contragent": "91c51bb0-e860-42ae-92af-683a76f47611",
+                        "agreement": true
+                    }
+                ],
                 accounts: [
                     {
                         id: 0,
@@ -516,11 +531,23 @@
                 this.ttl.setDate(this.ttl.getDate() + 30);
                 this.inAgreementProcess = true;
             },
-            acceptAgreement(zones) {
-                this.agreements = [...this.agreements, ...zones];
+            acceptAgreement() {
+                this.loadConsents();
                 this.inAgreementProcess = false;
                 this.getAgreementProcess = null;
                 this.ttl = null;
+            },
+            loadConsents() {
+                axios.get(getURL('consents/consent')).then(res => {
+                    this.consents = res.data;
+                    this.consents.filter(o => {
+                        return (o.agent_client === this.clientId && o.agent === this.myId)
+                    });
+
+                    this.consents.forEach(consent => {
+                        this.agreements.push(consent.scope);
+                    })
+                }).catch(err => {console.log(err)})
             }
         },
         computed: {

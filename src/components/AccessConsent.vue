@@ -32,19 +32,25 @@
         <v-text-field class="px-4" :readonly="code"  v-if="code" label="Введите код" v-model="code"></v-text-field>
 
         <v-card-actions>
-            <v-btn block :readonly="!code" v-on:click="callback(requiredAgreements)" text="Даю согласие"> </v-btn>
+            <v-btn block :readonly="!code" v-on:click="createConsents()" text="Даю согласие"> </v-btn>
 
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
+    import axios from 'axios';
+    import {getURL} from "@/utils/settings";
+
     export default {
         name: "AccessConsent",
         props: {
             sp: String,
             sendSms: Function,
             requiredAgreements: Array,
+            agent: String,
+            contragent: String,
+            agentClient: String,
             callback: Function,
             errback: Function,
             ttl: Date
@@ -57,6 +63,20 @@
             }
         },
         methods: {
+            async createConsents() {
+                // eslint-disable-next-line no-unused-vars
+                for (const agree of this.requiredAgreements) {
+                    await axios.post(getURL('consents/consents', {
+                        scope: agree,
+                        expire_date_time: this.ttl,
+                        agent: this.agent,
+                        agent_client: this.agent_client,
+                        contragent: this.contragent,
+                        agreement: true,
+                    }))
+                }
+                this.callback();
+            },
             authGosus() {
                 this.code = `${Math.round(Math.random()*999).toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping: false})}-${Math.round(Math.random()*999).toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping: false})}`
                 this.sendSms('gosuslugi', `Код для авторизации: ${this.code}`);
