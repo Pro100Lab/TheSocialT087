@@ -47,7 +47,7 @@
                             Счета
                         </v-card-title>
                         <template v-if="agreements.indexOf('Получение сведений') !== -1">
-                        <v-row v-for="account of accounts" :key="`bank-account-${account.idx}`" class="pa-2">
+                        <v-row v-for="account of accounts" :key="`bank-account-${account.id}`" class="pa-2">
                             <v-col cols="12" class="py-0">
                                 <v-card rounded="lg" elevation="0" style="background-color: rgba(255,255,255,0.5)">
                                     <v-card-subtitle class="pt-4">{{account.name}}</v-card-subtitle>
@@ -55,7 +55,7 @@
                                     <v-card-actions>
                                         <v-btn
                                                 v-for="action of account.actions"
-                                                :key="`bank-account-action-${account.idx}-${action.idx}`"
+                                                :key="`bank-account-action-${account.id}-${action.id}`"
                                                 v-on:click="processLink(action.link)"
                                                 rounded="xl"
                                         >
@@ -177,31 +177,31 @@
                 },
                 accounts: [
                     {
-                        idx: 0,
+                        id: 0,
                         name: 'Денежки',
-                        amount: 24035632,
-                        currency: 'rub',
+                        balance: 24035632,
+                        valute: 'rub',
                         cards: [{
-                            idx: 0,
+                            id: 0,
                             number: '1111 1111 1111 1111'
                         }],
                         actions: [{
-                            idx: 0,
+                            id: 0,
                             name: 'Перевести',
                             link: 'transfer'
                         }]
                     },
                     {
-                        idx: 3,
+                        id: 3,
                         name: 'Счет для погашения кредита',
-                        amount: 10,
-                        currency: 'rub',
+                        balance: 10,
+                        valute: 'rub',
                         cards: [{
-                            idx: 0,
+                            id: 0,
                             number: '1111 1111 1111 1111'
                         }],
                         actions: [{
-                            idx: 1,
+                            id: 1,
                             name: 'Перевести',
                             link: 'transfer'
                         }]
@@ -447,6 +447,9 @@
                 }).catch(err => {
                     console.log(err)
                 });
+            },
+            getAgreements() {
+
             },
             auth(clientId) {
                 this.clientId = clientId;
